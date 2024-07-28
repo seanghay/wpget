@@ -1,3 +1,4 @@
+import json
 import requests
 import multiprocessing as mp
 from collections import OrderedDict
@@ -8,6 +9,7 @@ from fake_useragent import UserAgent
 from requests import Session
 from requests.adapters import HTTPAdapter, Retry
 from tqdm import tqdm
+from chardet import detect
 
 urllib3.disable_warnings(category=urllib3.exceptions.InsecureRequestWarning)
 
@@ -20,19 +22,22 @@ def get_page(args):
     retries = Retry(total=max_retries, backoff_factor=0.1)
     session = Session()
     session.mount("https://", HTTPAdapter(max_retries=retries))
+    session.mount("http://", HTTPAdapter(max_retries=retries))
     headers = {"User-Agent": str(ua.random)}
     res = session.get(url, allow_redirects=True, verify=False, headers=headers)
-    return res.json()
+    encoding = detect(res.content)["encoding"]
+    content = res.content.decode(encoding=encoding)
+    data = json.loads(content)
+    return data
 
-  except requests.exceptions.Timeout:
+  except requests.exceptions.Timeout as e:
     return []
 
-  except requests.exceptions.TooManyRedirects:
+  except requests.exceptions.TooManyRedirects as e:
     return []
 
   except requests.exceptions.RequestException as e:
     return []
-
 
 def get_page_count(url):
   session = Session()
@@ -62,7 +67,7 @@ def get_posts(base_url, nproc=None, max_retries=10, per_page=100):
     )
     for page_idx in range(total_pages)
   ]
-  
+
   print(f"Found {total_posts:,} posts")
   counter = 0
   with tqdm(total=total_pages, desc=base_url, ascii=True) as pbar:
