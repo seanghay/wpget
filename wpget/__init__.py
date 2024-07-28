@@ -30,14 +30,18 @@ def get_page(args):
     data = json.loads(content)
     return data
 
-  except requests.exceptions.Timeout as e:
+  except json.decoder.JSONDecodeError:
     return []
 
-  except requests.exceptions.TooManyRedirects as e:
+  except requests.exceptions.Timeout:
     return []
 
-  except requests.exceptions.RequestException as e:
+  except requests.exceptions.TooManyRedirects:
     return []
+
+  except requests.exceptions.RequestException:
+    return []
+
 
 def get_page_count(url):
   session = Session()
