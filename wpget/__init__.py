@@ -47,8 +47,8 @@ def get_page_count(url):
 
 
 def get_posts(base_url, nproc=None, max_retries=10, per_page=100):
-  url = urljoin(base_url, f"/wp-json/wp/v2/posts?per_page={per_page}")
-  page_count_result = get_page_count(url)
+  url = urljoin(base_url, "/wp-json/wp/v2/posts")
+  page_count_result = get_page_count(url + f"?per_page={per_page}")
 
   if page_count_result is None:
     raise Exception("Not a WordPress website. Unable to get the total pages.")
@@ -62,7 +62,7 @@ def get_posts(base_url, nproc=None, max_retries=10, per_page=100):
     )
     for page_idx in range(total_pages)
   ]
-
+  
   print(f"Found {total_posts:,} posts")
   counter = 0
   with tqdm(total=total_pages, desc=base_url, ascii=True) as pbar:
