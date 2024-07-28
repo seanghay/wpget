@@ -46,8 +46,8 @@ def get_page_count(url):
   return total_pages, total_posts
 
 
-def get_posts(base_url, nproc=None, max_retries=10):
-  url = urljoin(base_url, "/wp-json/wp/v2/posts")
+def get_posts(base_url, nproc=None, max_retries=10, per_page=100):
+  url = urljoin(base_url, f"/wp-json/wp/v2/posts?per_page={per_page}")
   page_count_result = get_page_count(url)
 
   if page_count_result is None:
@@ -56,7 +56,10 @@ def get_posts(base_url, nproc=None, max_retries=10):
   total_pages, total_posts = page_count_result
 
   paged_urls = [
-    (url + "?" + urlencode(OrderedDict(page=page_idx + 1)), max_retries)
+    (
+      url + "?" + urlencode(OrderedDict(page=page_idx + 1, per_page=per_page)),
+      max_retries,
+    )
     for page_idx in range(total_pages)
   ]
 

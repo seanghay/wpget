@@ -33,6 +33,10 @@ def main():
   parser.add_argument(
     "-r", "--retry", type=int, required=False, default=10, help="Max retries"
   )
+  
+  parser.add_argument(
+    "-p", "--per_page", type=int, required=False, default=100, help="Per page"
+  )
 
   args = parser.parse_args()
 
@@ -55,7 +59,7 @@ def main():
     print(f"Output file ({output_file}) already exists!")
     exit(-1)
 
-  posts_iterator = get_posts(base_url, nproc=args.nproc, max_retries=args.retry)
+  posts_iterator = get_posts(base_url, nproc=args.nproc, max_retries=args.retry, per_page=args.per_page)
   with open(output_file, "w") as outfile:
     for posts in posts_iterator:
       for post in posts:
