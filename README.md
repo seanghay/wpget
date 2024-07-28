@@ -2,7 +2,6 @@
 
 A tool for downloading all posts from a WordPress website via public JSON API
 
-
 ```shell
 pip install wpget
 

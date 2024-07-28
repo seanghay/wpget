@@ -15,7 +15,7 @@ classifiers = [
   'Programming Language :: Python :: 3.8',
 ]
 
-dependencies = ["tqdm", "requests"]
+dependencies = ["tqdm", "requests", "fake-useragent"]
 
 [project.urls]
 Homepage = "https://pypi.org/project/wpget"
