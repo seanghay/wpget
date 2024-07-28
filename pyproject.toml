@@ -1,6 +1,6 @@
 [project]
 name = "wpget"
-version = "0.1.0"
+version = "0.1.1"
 description = "A tool for downloading all posts from a WordPress website via public JSON API"
 authors = [{ name = "Seanghay Yath", email = "seanghay.dev@gmail.com" }]
 readme = "README.md"
